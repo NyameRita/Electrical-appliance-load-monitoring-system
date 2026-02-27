@@ -1,32 +1,106 @@
-Title: Electrical Appliance Load Monitoring System (Week 3)
+Electrical Appliance Load Monitoring System (C++)
+Project Description
 
-Overview
-This week introduced appliance search and billing calculation based on a tariff. The billing summary shows energy and cost.
+This is a console-based C++ application developed to monitor electrical appliance usage and calculate energy consumption and billing costs.
 
-What I implemented
+The system allows users to:
 
-Case-insensitive search by appliance name (partial match).
+Register appliances with power rating and daily usage hours
 
-Billing calculation using tariff input:
+Store appliance data in a file
 
-cost/day = total_kWh/day × tariff
+Calculate total daily energy usage (kWh/day)
 
-Output formatted using iomanip for clean tables.
+Generate a billing report based on electricity tariff
 
-Why it matters
+Save the billing report to a text file
 
-Search improves usability when appliances increase.
+The program uses file handling to persist data between runs.
 
-Billing converts technical energy numbers into real-world cost.
+How the System Works
+1️⃣ Appliance Registration
 
-How billing works
+Each appliance is stored in this format:
 
-User enters tariff (cost per kWh)
+Name|Power(Watts)|HoursPerDay
 
-Program calculates:
+Example:
 
-total kWh/day
+kettle|125|0.3
+Laptop|50|6
+2️⃣ Energy Calculation Formula
 
-daily cost
+Daily Energy (kWh):
 
-monthly estimate (optional)
+Energy (kWh/day) = (Power × Hours) ÷ 1000
+
+Example:
+
+Kettle → (125 × 0.3) ÷ 1000 = 0.037 kWh/day
+
+Laptop → (50 × 6) ÷ 1000 = 0.300 kWh/day
+
+Total Daily Energy = 0.337 kWh/day
+
+3️⃣ Billing Calculation
+
+If tariff is provided by the user:
+
+Daily Cost = Total kWh/day × Tariff
+Monthly Cost = Daily Cost × 30
+
+From demo:
+
+Total Daily Cost = 7.09
+
+Monthly Energy (30 days) = 10.125 kWh
+
+Monthly Cost (30 days) = 212.62
+
+Project Files
+main.cpp              → Source code
+appliances.txt        → Stored appliance data
+billing_summary.txt   → Generated billing report
+README.md             → Project documentation
+.gitignore            → Excludes executable files
+Program Features
+
+✔ Input validation for correct numeric values
+✔ File saving and loading
+✔ Case-insensitive search
+✔ Formatted console output
+✔ Automatic billing report generation
+✔ Monthly energy and cost estimation
+
+How To Compile and Run
+Compile (MinGW / g++)
+g++ main.cpp -o main
+Run (PowerShell)
+.\main
+Sample Billing Output
+================ BILLING REPORT =================
+No.  Name        kWh/day    Cost/day
+-------------------------------------
+1    kettle      0.037      0.79
+2    Laptop      0.300      6.30
+-------------------------------------
+Total Energy (per day): 0.337 kWh/day
+Total Cost (per day):   7.09
+Monthly Energy (30d):   10.125 kWh
+Monthly Cost (30d):     212.62
+=================================================
+Conclusion
+
+This project demonstrates:
+
+Structured programming in C++
+
+Use of structs and vectors
+
+File handling (ifstream / ofstream)
+
+Data formatting with iomanip
+
+Practical implementation of energy and billing calculations
+
+The system can be expanded further to include database integration, GUI interface, or real-time monitoring features.
