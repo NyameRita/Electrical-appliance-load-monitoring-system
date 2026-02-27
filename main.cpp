@@ -1,4 +1,3 @@
-// Week 4: Electrical Load Monitoring System
 // Adds: File persistence (save/load) + Billing report export to file
 
 #include <iostream>
