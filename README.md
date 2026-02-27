@@ -1,24 +1,32 @@
-Title: Electrical Appliance Load Monitoring System (Week 1)
+Title: Electrical Appliance Load Monitoring System (Week 3)
 
 Overview
-This week focused on setting up the project structure and building the core appliance data model. The aim is to track appliances (name, wattage, usage hours/day) and prepare for later energy and billing calculations.
+This week introduced appliance search and billing calculation based on a tariff. The billing summary shows energy and cost.
 
 What I implemented
 
-Defined an Appliance structure to store:
+Case-insensitive search by appliance name (partial match).
 
-appliance name
+Billing calculation using tariff input:
 
-power rating (W)
+cost/day = total_kWh/day × tariff
 
-usage hours per day
-
-Created a simple menu skeleton for navigation.
-
-Set up basic program flow (main() loop).
+Output formatted using iomanip for clean tables.
 
 Why it matters
 
-The Appliance model is the foundation for all later features (energy calculation, billing, saving/loading).
+Search improves usability when appliances increase.
 
-A menu-driven structure makes the program easy to extend
+Billing converts technical energy numbers into real-world cost.
+
+How billing works
+
+User enters tariff (cost per kWh)
+
+Program calculates:
+
+total kWh/day
+
+daily cost
+
+monthly estimate (optional)
