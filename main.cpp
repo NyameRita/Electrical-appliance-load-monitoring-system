@@ -1,43 +1,161 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <limits>
+#include <iomanip>
 
 using namespace std;
 
-// Week 1: Data model for an appliance
 struct Appliance {
-    string name;        // appliance name
-    double powerW;      // power in watts
-    double hoursPerDay; // usage hours per day
+    string name;
+    double powerW;
+    double hoursPerDay;
+
+    // Week 2: daily energy consumption in kWh
+    double energyKWhPerDay() const {
+        return (powerW * hoursPerDay) / 1000.0;
+    }
 };
+
+static void clearBadInput() {
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
 
 int menu() {
     cout << "\n==============================\n";
     cout << "   Electrical Load Monitoring\n";
     cout << "==============================\n";
-    cout << "1. Register appliance (coming)\n";
-    cout << "2. View all appliances (coming)\n";
+    cout << "1. Register appliance\n";
+    cout << "2. View all appliances\n";
+    cout << "3. Energy summary (kWh/day)\n";
     cout << "0. Exit\n";
     cout << "Choose: ";
 
     int choice;
     cin >> choice;
+
+    if (cin.fail()) {
+        clearBadInput();
+        return -1;
+    }
     return choice;
 }
 
+Appliance registerAppliance() {
+    Appliance a{};
+
+    // clear leftover newline before getline
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    // name validation
+    do {
+        cout << "Enter appliance name: ";
+        getline(cin, a.name);
+        if (a.name.empty()) cout << "Name must not be empty.\n";
+    } while (a.name.empty());
+
+    // power validation
+    while (true) {
+        cout << "Enter power rating (W): ";
+        cin >> a.powerW;
+
+        if (!cin.fail() && a.powerW > 0) break;
+
+        cout << "Power must be a number > 0.\n";
+        clearBadInput();
+    }
+
+    // hours validation
+    while (true) {
+        cout << "Enter usage hours per day (0 - 24): ";
+        cin >> a.hoursPerDay;
+
+        if (!cin.fail() && a.hoursPerDay >= 0 && a.hoursPerDay <= 24) break;
+
+        cout << "Hours must be between 0 and 24.\n";
+        clearBadInput();
+    }
+
+    cout << "Appliance registered successfully!\n";
+    return a;
+}
+
+void viewAllAppliances(const vector<Appliance>& appliances) {
+    if (appliances.empty()) {
+        cout << "No appliances registered.\n";
+        return;
+    }
+
+    cout << "\n================= APPLIANCES =================\n";
+    cout << left
+         << setw(5)  << "No."
+         << setw(20) << "Name"
+         << setw(12) << "Power(W)"
+         << setw(12) << "Hours/day"
+         << "\n----------------------------------------------\n";
+
+    for (size_t i = 0; i < appliances.size(); i++) {
+        const auto& a = appliances[i];
+        cout << left
+             << setw(5)  << (i + 1)
+             << setw(20) << a.name
+             << setw(12) << fixed << setprecision(2) << a.powerW
+             << setw(12) << fixed << setprecision(2) << a.hoursPerDay
+             << "\n";
+    }
+    cout << "================================================\n";
+}
+
+void showEnergySummary(const vector<Appliance>& appliances) {
+    if (appliances.empty()) {
+        cout << "No appliances registered.\n";
+        return;
+    }
+
+    cout << "\n=========== ENERGY SUMMARY (per day) ==========\n";
+    cout << left
+         << setw(20) << "Name"
+         << setw(12) << "kWh/day"
+         << "\n----------------------------------------------\n";
+
+    double total = 0.0;
+
+    for (const auto& a : appliances) {
+        double kwh = a.energyKWhPerDay();
+        total += kwh;
+        cout << left
+             << setw(20) << a.name
+             << setw(12) << fixed << setprecision(3) << kwh
+             << "\n";
+    }
+
+    cout << "----------------------------------------------\n";
+    cout << "TOTAL: " << fixed << setprecision(3) << total << " kWh/day\n";
+}
+
 int main() {
-    vector<Appliance> appliances; // Week 1: store appliances in memory
+    vector<Appliance> appliances;
 
     while (true) {
         int choice = menu();
 
-        if (choice == 0) {
-            cout << "Goodbye!\n";
-            break;
+        switch (choice) {
+            case 1: {
+                appliances.push_back(registerAppliance());
+                break;
+            }
+            case 2:
+                viewAllAppliances(appliances);
+                break;
+            case 3:
+                showEnergySummary(appliances);
+                break;
+            case 0:
+                cout << "Goodbye!\n";
+                return 0;
+            default:
+                cout << "Invalid choice. Please try again.\n";
         }
-
-        cout << "Feature not added yet. Continue in Week 2.\n";
     }
-
-    return 0;
 }
